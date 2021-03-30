@@ -15,6 +15,7 @@ router.post("/signup", async (req, res) => {
     const token = await user.generateAuthToken();
     res.status(201).send({ user, token });
   } catch (e) {
+      console.log(e)
     res.status(400).send();
   }
 });
@@ -26,20 +27,11 @@ router.post("/login", async (req, res) => {
       req.body.email,
       req.body.password
     );
-    if (user.tokens.token) {
-      jwt.verify(user.tokens.token, "demodemodemo", async function (err) {
-        if (err) {
-          const token = await user.generateAuthToken();
-          res({ user, token });
-        }
-        const token = user.tokens.token;
-        res.send({ user, token });
-      });
-    } else {
-      const token = await user.generateAuthToken();
-      res.send({ user, token });
-    }
+
+    const token = await user.generateAuthToken();
+    res.send({ user, token });
   } catch (e) {
+      console.log(e)
     res.status(400).send();
   }
 });
