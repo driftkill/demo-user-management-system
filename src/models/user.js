@@ -45,24 +45,22 @@ const userSchema = new mongoose.Schema(
 // this function will hide all the sensitive information from user object
 // whenever user object is passed to the client i.e. user itself
 userSchema.methods.toJSON = function () {
-    const user = this
-    const userObject = user.toObject()
+  const user = this;
+  const userObject = user.toObject();
 
-    delete userObject.password
-    delete userObject.tokens
+  delete userObject.password;
+  delete userObject.tokens;
 
-    return userObject
-}
+  return userObject;
+};
 
 // this will generate a new auth token for the user
 userSchema.methods.generateAuthToken = async function () {
   const user = this;
 
-  console.log(typeof user)
-  console.log(user)
-  console.log(user.tokens.length)
-
-  // if (typeof user !== 'undefined' && user.tokens.length > 0) {}
+  if (typeof user == "object" && user.tokens.length > 0) {
+    return user.tokens[0];
+  }
 
   const token = jwt.sign({ _id: user._id.toString() }, "demodemodemo");
 
